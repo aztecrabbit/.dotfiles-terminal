@@ -50,7 +50,6 @@ antigen bundle ufw
 
 # Plugins
 
-antigen bundle alias-finder
 antigen bundle colored-man-pages
 antigen bundle command-not-found
 antigen bundle git-flow
@@ -101,6 +100,16 @@ alias ls="ls --color=auto --group-directories-first --literal --time-style '+%b 
 alias ll="ls -l"
 alias la="ll -a"
 alias lt="ll --tree --level=2"
+
+# Docker Compose
+
+alias dcub="docker-compose up --build"
+
+# Alias Finder
+
+af () {
+    alias | grep "$*"
+}
 
 
 # Private
