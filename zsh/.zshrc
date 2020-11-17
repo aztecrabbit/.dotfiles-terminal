@@ -60,7 +60,7 @@ antigen bundle postgres
 antigen bundle profiles
 antigen bundle sudo
 antigen bundle transfer
-antigen bundle virtualenvwrapper
+# antigen bundle virtualenvwrapper
 
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-completions
