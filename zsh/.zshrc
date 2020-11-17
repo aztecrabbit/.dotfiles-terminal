@@ -108,7 +108,7 @@ alias dcub="docker-compose up --build"
 # Alias Finder
 
 af () {
-    alias | grep "$*"
+    alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
 }
 
 
