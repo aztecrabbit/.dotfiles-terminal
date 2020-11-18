@@ -4,6 +4,7 @@ get_distribution()
 {
     if [ ! -f /etc/os-release ]; then
         echo "android"
+        return
     fi
 
     grep -E "^ID=" /etc/os-release | cut -d "=" -f 2
