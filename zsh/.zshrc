@@ -102,6 +102,12 @@ alias ll="ls -l"
 alias la="ll -a"
 alias lt="ll --tree --level=2"
 
+# Dotfiles
+
+alias dotfiles="cd ~/.dotfiles && git status -s"
+alias dotfiles-private="cd ~/.dotfiles-private && git status -s"
+alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s"
+
 # Docker Compose
 
 alias dcub="docker-compose up --build"
