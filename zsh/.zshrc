@@ -14,16 +14,16 @@ get_distribution()
 # Install Antigen
 #
 
-if [ "$UID" != "0" ] && [ ! -f "$HOME/.antigen.sh" ]; then
-    curl -L git.io/antigen-nightly > $HOME/.antigen.sh && chmod +x $HOME/.antigen.sh
+if [ "$UID" != "0" ] && [ ! -f "$HOME/.antigen.zsh" ]; then
+    curl -L git.io/antigen-nightly > $HOME/.antigen.zsh
 fi
 
-if [ ! -f "$HOME/.antigen.sh" ]; then
+if [ ! -f "$HOME/.antigen.zsh" ]; then
     echo "Antigen not found!"
     return
 fi
 
-source $HOME/.antigen.sh
+source $HOME/.antigen.zsh
 
 
 # Antigen
