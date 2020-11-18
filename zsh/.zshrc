@@ -99,22 +99,30 @@ ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=red"
 
 alias ls="ls --color=auto --group-directories-first --literal --time-style '+%b %d %Y %H:%m'"
 alias ll="ls -l"
-alias la="ll -a"
-alias lt="ll --tree --level=2"
 
 # Dotfiles
 
-alias dotfiles="cd ~/.dotfiles && git status -s"
-alias dotfiles-private="cd ~/.dotfiles-private && git status -s"
-alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s"
+alias dotfiles="cd ~/.dotfiles && git status -s -u"
+alias dotfiles-private="cd ~/.dotfiles-private && git status -s -u"
+alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
 # Docker Compose
 
-alias dcub="docker-compose up --build"
+alias dcupb="docker-compose up --build"
+
+# Git
+
+gclgh () {
+    git clone --recurse-submodules https://github.com/$*
+}
+
+gclgl () {
+    git clone --recurse-submodules https://gitlab.com/$*
+}
 
 # Alias Finder
 
-af () {
+a () {
     alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
 }
 
