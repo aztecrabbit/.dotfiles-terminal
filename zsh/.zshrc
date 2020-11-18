@@ -70,7 +70,7 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 # Themes
 
 if [ "$(get_distribution)" = "android" ]; then
-    antigen theme aztecrabbit/zsh-themes themes/aztecrabbit-termux
+    antigen theme aztecrabbit/zsh-themes themes/aztecrabbit-simple
 else
     antigen theme aztecrabbit/zsh-themes themes/aztecrabbit
 fi
