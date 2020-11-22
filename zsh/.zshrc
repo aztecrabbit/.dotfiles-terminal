@@ -109,6 +109,12 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 # Docker Compose
 
 alias dcupb="docker-compose up --build"
+alias dcupbd="docker-compose up --build -d"
+
+# Go-Lang
+
+alias gobs="go build -ldflags '-linkmode external -extldflags -static'"
+alias gobss="go build -ldflags '-linkmode external -extldflags -static -s -w'"
 
 # Git
 
