@@ -108,6 +108,7 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
 # Docker Compose
 
+alias dcf="docker-compose -f"
 alias dcupb="docker-compose up --build"
 alias dcupbd="docker-compose up --build -d"
 
