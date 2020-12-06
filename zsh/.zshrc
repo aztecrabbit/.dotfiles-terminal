@@ -111,10 +111,26 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 alias dcupb="docker-compose up --build"
 alias dcupbd="docker-compose up --build -d"
 
+dcupbf () {
+	docker-compose -f "$1" up --build ${*:2}
+}
+
+dcupbdf () {
+	docker-compose -f "$1" up --build -d ${*:2}
+}
+
+dcdnf () {
+	docker-compose -f "$1" down ${*:2}
+}
+
 # Go-Lang
 
 alias gobs="go build -ldflags '-linkmode external -extldflags -static'"
 alias gobss="go build -ldflags '-linkmode external -extldflags -static -s -w'"
+
+# Openssh
+
+alias ssh-ignore="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # Git
 
