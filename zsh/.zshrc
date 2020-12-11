@@ -106,14 +106,42 @@ alias dotfiles="cd ~/.dotfiles && git status -s -u"
 alias dotfiles-private="cd ~/.dotfiles-private && git status -s -u"
 alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
+# Docker
+
+docker_clean () {
+	containers="$(docker ps -qa)"
+	if [ ! -z "$images" ]; then
+		docker rm $containers
+	fi
+
+	images="$(docker images | grep '^<none>' | awk '{ print $3 }')"
+	if [ ! -z "$images" ]; then
+		docker rmi $images
+	fi
+}
+
 # Docker Compose
 
 alias dcf="docker-compose -f"
 alias dcupb="docker-compose up --build"
 alias dcupbd="docker-compose up --build -d"
 
+dcupbdn () {
+	docker-compose up --build
+	docker-compose down
+}
+
+dcef () {
+	docker-compose -f "$1" exec ${*:2}
+}
+
 dcupbf () {
 	docker-compose -f "$1" up --build ${*:2}
+}
+
+dcupbdnf () {
+	docker-compose -f "$1" up --build ${*:2}
+	docker-compose -f "$1" down
 }
 
 dcupbdf () {
