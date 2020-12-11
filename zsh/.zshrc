@@ -108,7 +108,7 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
 # Docker
 
-docker_clean () {
+docker_clear () {
 	containers="$(docker ps -qa)"
 	if [ ! -z "$images" ]; then
 		docker rm $containers
