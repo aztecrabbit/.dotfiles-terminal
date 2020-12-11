@@ -110,13 +110,13 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
 docker_clear () {
 	containers="$(docker ps -qa)"
-	if [ ! -z "$images" ]; then
-		docker rm $containers
+	if [ ! -z "$containers" ]; then
+		echo $containers | xargs docker rm
 	fi
 
 	images="$(docker images | grep '^<none>' | awk '{ print $3 }')"
 	if [ ! -z "$images" ]; then
-		docker rmi $images
+		echo $images | xargs docker rmi
 	fi
 }
 
