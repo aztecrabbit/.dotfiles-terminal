@@ -4,7 +4,7 @@ get_distribution()
 {
     if [ ! -f /etc/os-release ]; then
         echo "android"
-        return
+        return 0
     fi
 
     grep -E "^ID=" /etc/os-release | cut -d "=" -f 2
@@ -20,7 +20,7 @@ fi
 
 if [ ! -f "$HOME/.antigen.zsh" ]; then
     echo "Antigen not found!"
-    return
+    return 1
 fi
 
 source $HOME/.antigen.zsh
