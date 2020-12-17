@@ -14,6 +14,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/vim-plug'
 
+Plug 'airblade/vim-gitgutter'                           " git diff
 Plug 'vim-airline/vim-airline'                          " status bar
 Plug 'tpope/vim-commentary'                             " comment
 Plug 'sheerun/vim-polyglot'                             " syntax highlight
