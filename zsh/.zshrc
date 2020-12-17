@@ -98,7 +98,7 @@ ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=red"
 #
 
 alias ls="ls --color=auto --group-directories-first --literal --time-style '+%b %d %Y %H:%m'"
-alias ll="ls -l"
+alias ll="ls -l --human-readable"
 
 # Dotfiles
 
