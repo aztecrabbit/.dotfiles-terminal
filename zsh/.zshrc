@@ -106,6 +106,20 @@ alias dotfiles="cd ~/.dotfiles && git status -s -u"
 alias dotfiles-private="cd ~/.dotfiles-private && git status -s -u"
 alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
+# Django
+
+django_start () {
+	DJANGO_DEBUG=0 DJANGO_ALLOWED_HOSTS='*' python manage.py runserver $*
+}
+
+django_start_debug () {
+	DJANGO_DEBUG=1 DJANGO_ALLOWED_HOSTS='*' python manage.py runserver $*
+}
+
+django_start_gunicorn () {
+	DJANGO_DEBUG=0 DJANGO_ALLOWED_HOSTS='*' gunicorn web.wsgi:application --bind $*
+}
+
 # Docker
 
 docker_clear () {
@@ -154,14 +168,16 @@ dcdnf () {
 
 # Go-Lang
 
-alias gobs="go build -ldflags '-linkmode external -extldflags -static'"
-alias gobss="go build -ldflags '-linkmode external -extldflags -static -s -w'"
+alias gobs="go build -ldflags '-s -w'"
+alias gobss="go build -ldflags '-s -w -linkmode external -extldflags -static'"
 
 # Openssh
 
 alias ssh-ignore="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # Git
+
+alias gss="git status -s -u"
 
 gclgh () {
     git clone --recurse-submodules https://github.com/$*
@@ -177,6 +193,24 @@ a () {
     alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
 }
 
+# Vim
+
+alias zshrc="vim ~/.zshrc"
+
+# Notes
+
+notes () {
+	if [ "$*" = "ls" ] ; then
+		ls -1 ~/.notes*
+		return 0
+	fi
+
+	if [ "$*" ] ; then
+		vim ~/.notes-$(echo "${*// /-}" | tr "[:upper:]" "[:lower:]")
+	else
+		vim ~/.notes
+	fi
+}
 
 # Private
 #
