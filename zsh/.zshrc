@@ -100,6 +100,12 @@ ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=red"
 alias ls="ls --color=auto --group-directories-first --literal --time-style '+%b %d %Y %H:%m'"
 alias ll="ls -l --human-readable"
 
+# Alias Finder
+
+a () {
+    alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
+}
+
 # Dotfiles
 
 alias dotfiles="cd ~/.dotfiles && git status -s -u"
@@ -108,8 +114,21 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
 # Django
 
+django_export_debug () {
+	export DJANGO_DEBUG=0
+	export DJANGO_ALLOWED_HOSTS='*'
+}
+
+django_unset_debug () {
+	unset DJANGO_DEBUG
+	unset DJANGO_ALLOWED_HOSTS
+}
+
 django_start () {
-	DJANGO_DEBUG=0 DJANGO_ALLOWED_HOSTS='*' python manage.py runserver $*
+	django_export_debug
+	python manage.py collectstatic --noinput >/dev/null
+	python manage.py runserver $*
+	django_unset_debug
 }
 
 django_start_debug () {
@@ -117,7 +136,10 @@ django_start_debug () {
 }
 
 django_start_gunicorn () {
-	DJANGO_DEBUG=0 DJANGO_ALLOWED_HOSTS='*' gunicorn web.wsgi:application --bind $*
+	django_export_debug
+	python manage.py collectstatic --noinput >/dev/null
+	gunicorn web.wsgi:application --bind $*
+	django_unset_debug
 }
 
 # Docker
@@ -166,15 +188,6 @@ dcdnf () {
 	docker-compose -f "$1" down ${*:2}
 }
 
-# Go-Lang
-
-alias gobs="go build -ldflags '-s -w'"
-alias gobss="go build -ldflags '-s -w -linkmode external -extldflags -static'"
-
-# Openssh
-
-alias ssh-ignore="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-
 # Git
 
 alias gss="git status -s -u"
@@ -187,15 +200,20 @@ gclgl () {
     git clone --recurse-submodules https://gitlab.com/$*
 }
 
-# Alias Finder
+# Go-Lang
 
-a () {
-    alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
+alias gobs="go build -ldflags '-s -w'"
+alias gobss="go build -ldflags '-s -w -linkmode external -extldflags -static'"
+
+# Mega
+
+mega-progress()
+{
+    while true; do
+        clear && mega-transfers --limit=32
+        sleep 2
+    done
 }
-
-# Vim
-
-alias zshrc="vim ~/.zshrc"
 
 # Notes
 
@@ -211,6 +229,29 @@ notes () {
 		vim ~/.notes
 	fi
 }
+
+# Openssh
+
+alias ssh-ignore="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+# Vim
+
+alias zshrc="vim ~/.zshrc"
+
+# Virtual Environment Wrapper
+
+source_virtualenvironmentwrapper()
+{
+    if [[ -a "$HOME/.local/bin/virtualenvwrapper.sh" ]]; then
+        export WORKON_HOME="$HOME/.virtualenvs"
+        export PROJECT_HOME="$HOME/Virtual Environment"
+        export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python3"
+        export VIRTUALENVWRAPPER_VIRTUALENV_ARGS=" -p /usr/bin/python3"
+
+        source $HOME/.local/bin/virtualenvwrapper.sh
+    fi
+}
+
 
 # Private
 #
