@@ -215,6 +215,19 @@ mega-progress()
     done
 }
 
+# Nmcli
+
+nmcli_refresh () {
+	nmcli dev wifi list --rescan yes
+}
+
+nmcli_reload () {
+	nmcli net off
+	nmcli net on
+
+	nmcli_refresh
+}
+
 # Notes
 
 notes () {
