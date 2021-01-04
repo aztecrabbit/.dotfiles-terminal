@@ -156,6 +156,10 @@ docker_clear () {
 	fi
 }
 
+docker_run () {
+	docker run --rm -it $*
+}
+
 # Docker Compose
 
 alias dcf="docker-compose -f"
@@ -207,8 +211,7 @@ alias gobss="go build -ldflags '-s -w -linkmode external -extldflags -static'"
 
 # Mega
 
-mega-progress()
-{
+mega_progress () {
     while true; do
         clear && mega-transfers --limit=32
         sleep 2
@@ -226,21 +229,6 @@ nmcli_reload () {
 	nmcli net on
 
 	nmcli_refresh
-}
-
-# Notes
-
-notes () {
-	if [ "$*" = "ls" ] ; then
-		ls -1 ~/.notes*
-		return 0
-	fi
-
-	if [ "$*" ] ; then
-		vim ~/.notes-$(echo "${*// /-}" | tr "[:upper:]" "[:lower:]")
-	else
-		vim ~/.notes
-	fi
 }
 
 # Openssh
@@ -263,6 +251,58 @@ source_virtualenvironmentwrapper()
 
         source $HOME/.local/bin/virtualenvwrapper.sh
     fi
+}
+
+
+# Applications
+#
+
+# Cmd
+
+cmd_set () {
+	vim ~/.cmd-$(echo "${1// /-}") -c ":set syntax=bash" ${*:2}
+}
+
+cmd_del () {
+	file=~/.cmd-$(echo "${1// /-}")
+
+	echo "Deleting $file"
+	echo "Enter to continue ..."
+	read
+
+	rm -f $file
+}
+
+cmd () {
+	if [ -z "$*" ] ; then
+		ls ~/.cmd-* -1 --color=no
+		return 0
+	fi
+
+	file=~/.cmd-$(echo "${1// /-}")
+
+	if [ -f "$file" ] ; then
+		chmod +x $file
+		bash -c $file ${*:2}
+
+	else
+		echo "Command \"$1\" not found!"
+	fi
+}
+
+# Notes
+
+notes () {
+	if [ "$*" = "ls" ] ; then
+		ls ~/.notes* -1
+		return 0
+	fi
+
+	if [ "$*" ] ; then
+		vim ~/.notes-$(echo "${*// /-}" | tr "[:upper:]" "[:lower:]")
+	else
+		vim ~/.notes
+	fi
 }
 
 
