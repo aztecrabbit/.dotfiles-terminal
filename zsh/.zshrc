@@ -275,7 +275,7 @@ cmd_del () {
 
 cmd () {
 	if [ -z "$*" ] ; then
-		ls ~/.cmd-* -1 --color=no
+		ls ~/.cmd-* -1 --color=no 2>/dev/null
 		return 0
 	fi
 
@@ -294,7 +294,7 @@ cmd () {
 
 notes () {
 	if [ "$*" = "ls" ] ; then
-		ls ~/.notes* -1
+		ls ~/.notes* -1 --color=no 2>/dev/null
 		return 0
 	fi
 
