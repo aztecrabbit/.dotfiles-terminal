@@ -274,7 +274,7 @@ cmd_del () {
 }
 
 cmd () {
-	if [ -z "$*" ] ; then
+	if [ -z "$1" ] ; then
 		ls ~/.cmd-* -1 --color=no 2>/dev/null
 		return 0
 	fi
@@ -283,7 +283,7 @@ cmd () {
 
 	if [ -f "$file" ] ; then
 		chmod +x $file
-		bash -c $file ${*:2}
+		bash -c "$file $(echo ${@:2})"
 
 	else
 		echo "Command \"$1\" not found!"
