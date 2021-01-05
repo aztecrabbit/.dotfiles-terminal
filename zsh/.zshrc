@@ -259,27 +259,48 @@ source_virtualenvironmentwrapper()
 
 # Cmd
 
+cmd_get_file () {
+	mkdir -p ~/.cmd
+
+	echo ~/.cmd/$(echo "${1// /-}")
+}
+
 cmd_set () {
-	vim ~/.cmd-$(echo "${1// /-}") -c ":set syntax=bash" ${*:2}
+	vim $(cmd_get_file "$1") -c ":set syntax=bash" ${*:2}
+}
+
+cmd_get () {
+	if [ -z "$1" ] ; then
+		ls $(cmd_get_file "$1") -1 --color=no 2>/dev/null | column
+		return 0
+	fi
+
+	file=$(cmd_get_file "$1")
+
+	if [ -f "$file" ] ; then
+		cat $file
+	fi
 }
 
 cmd_del () {
-	file=~/.cmd-$(echo "${1// /-}")
+	file=$(cmd_get_file "$1")
 
-	echo "Deleting $file"
-	echo "Enter to continue ..."
-	read
+	if [ -f "$file" ] ; then
+		echo "Deleting $file"
+		echo "Enter to continue ..."
+		read
 
-	rm -f $file
+		rm -f $file
+	fi
 }
 
 cmd () {
 	if [ -z "$1" ] ; then
-		ls ~/.cmd-* -1 --color=no 2>/dev/null
+		cmd_get
 		return 0
 	fi
 
-	file=~/.cmd-$(echo "${1// /-}")
+	file=$(cmd_get_file "$1")
 
 	if [ -f "$file" ] ; then
 		chmod +x $file
