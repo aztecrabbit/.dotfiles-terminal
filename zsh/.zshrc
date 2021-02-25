@@ -124,9 +124,37 @@ django_unset_debug () {
 	unset DJANGO_ALLOWED_HOSTS
 }
 
+django_clear_cache () {
+	django_export_debug
+	python manage.py clear_cache
+	django_unset_debug
+}
+
+django_delete_migrations () {
+	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	find . -path "*/migrations/__pycache__/*" -delete
+}
+
+django_check () {
+	django_export_debug
+	python manage.py check $*
+	django_unset_debug
+}
+
+django_collectstatic () {
+	echo "Collecting staticfiles ..."
+	python manage.py collectstatic --noinput
+}
+
+django_compress () {
+	python manage.py compress
+}
+
 django_start () {
 	django_export_debug
-	python manage.py collectstatic --noinput >/dev/null
+	django_collectstatic
+	echo
+	django_compress
 	python manage.py runserver $*
 	django_unset_debug
 }
@@ -137,7 +165,9 @@ django_start_debug () {
 
 django_start_gunicorn () {
 	django_export_debug
-	python manage.py collectstatic --noinput >/dev/null
+	django_collectstatic
+	echo
+	django_compress
 	gunicorn web.wsgi:application --bind $*
 	django_unset_debug
 }
@@ -213,7 +243,7 @@ alias gobss="go build -ldflags '-s -w -linkmode external -extldflags -static'"
 
 mega_progress () {
     while true; do
-        clear && mega-transfers --limit=32
+        clear && mega-transfers --limit=16
         sleep 2
     done
 }
@@ -227,6 +257,8 @@ nmcli_refresh () {
 nmcli_reload () {
 	nmcli net off
 	nmcli net on
+
+	sleep 1
 
 	nmcli_refresh
 }
