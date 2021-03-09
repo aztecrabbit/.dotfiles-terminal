@@ -114,31 +114,25 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
 # Django
 
-django_export_debug () {
-	export DJANGO_DEBUG=0
-	export DJANGO_ALLOWED_HOSTS='*'
-}
-
-django_unset_debug () {
-	unset DJANGO_DEBUG
-	unset DJANGO_ALLOWED_HOSTS
-}
-
-django_clear_cache () {
-	django_export_debug
-	python manage.py clear_cache
-	django_unset_debug
-}
-
 django_delete_migrations () {
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 	find . -path "*/migrations/__pycache__/*" -delete
 }
 
+django_set_production () {
+	export DJANGO_DEBUG=0
+	export DJANGO_ALLOWED_HOSTS='*'
+}
+
+django_unset_production () {
+	unset DJANGO_DEBUG
+	unset DJANGO_ALLOWED_HOSTS
+}
+
 django_check () {
-	django_export_debug
+	django_set_production
 	python manage.py check $*
-	django_unset_debug
+	django_unset_production
 }
 
 django_collectstatic () {
@@ -150,26 +144,48 @@ django_compress () {
 	python manage.py compress
 }
 
-django_start () {
-	django_export_debug
+django_clear_cache () {
+	django_set_production
+	python manage.py clear_cache
+	django_unset_production
+}
+
+__django_start_constructor () {
 	django_collectstatic
 	echo
+
 	django_compress
+	echo
+
+	django_clear_cache
+	echo
+}
+
+__django_start_destructor () {
+}
+
+django_start () {
+	__django_start_constructor
+
+	django_set_production
 	python manage.py runserver $*
-	django_unset_debug
+	django_unset_production
+
+	__django_start_destructor
+}
+
+django_start_gunicorn () {
+	__django_start_constructor
+
+	django_set_production
+	gunicorn web.wsgi:application --bind $*
+	django_unset_production
+
+	__django_start_destructor
 }
 
 django_start_debug () {
 	DJANGO_DEBUG=1 DJANGO_ALLOWED_HOSTS='*' python manage.py runserver $*
-}
-
-django_start_gunicorn () {
-	django_export_debug
-	django_collectstatic
-	echo
-	django_compress
-	gunicorn web.wsgi:application --bind $*
-	django_unset_debug
 }
 
 # Docker
