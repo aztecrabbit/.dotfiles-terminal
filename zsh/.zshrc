@@ -141,7 +141,9 @@ django_collectstatic () {
 }
 
 django_compress () {
+	django_set_production
 	python manage.py compress
+	django_unset_production
 }
 
 django_clear_cache () {
