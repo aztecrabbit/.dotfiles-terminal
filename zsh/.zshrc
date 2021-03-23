@@ -115,6 +115,9 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 # Django
 
 django_delete_migrations () {
+	echo "Delete migrations? Enter to continue"
+	read
+
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 	find . -path "*/migrations/__pycache__/*" -delete
 }
@@ -153,7 +156,9 @@ django_clear_cache () {
 }
 
 __django_start_constructor () {
+	django_set_production
 	django_collectstatic
+	django_unset_production
 	echo
 
 	django_compress
