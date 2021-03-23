@@ -386,5 +386,3 @@ notes () {
 #
 
 [ -f ~/.zshrc-private ] && source ~/.zshrc-private
-
-return 0
