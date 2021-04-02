@@ -1,7 +1,6 @@
 #!/bin/sh
 
-get_distribution()
-{
+get_distribution() {
     if [ ! -f /etc/os-release ]; then
         echo "android"
         return 0
@@ -102,7 +101,7 @@ alias ll="ls -l --human-readable"
 
 # Alias Finder
 
-a () {
+a() {
     alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
 }
 
@@ -114,7 +113,7 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
 # Django
 
-django_delete_migrations () {
+django_delete_migrations() {
 	echo "Delete migrations? Enter to continue"
 	read
 
@@ -122,40 +121,40 @@ django_delete_migrations () {
 	find . -path "*/migrations/__pycache__/*" -delete
 }
 
-django_set_production () {
+django_set_production() {
 	export DJANGO_DEBUG=0
 	export DJANGO_ALLOWED_HOSTS='*'
 }
 
-django_unset_production () {
+django_unset_production() {
 	unset DJANGO_DEBUG
 	unset DJANGO_ALLOWED_HOSTS
 }
 
-django_check () {
+django_check() {
 	django_set_production
 	python manage.py check $*
 	django_unset_production
 }
 
-django_collectstatic () {
+django_collectstatic() {
 	echo "Collecting staticfiles ..."
 	python manage.py collectstatic --noinput
 }
 
-django_compress () {
+django_compress() {
 	django_set_production
 	python manage.py compress
 	django_unset_production
 }
 
-django_clear_cache () {
+django_clear_cache() {
 	django_set_production
 	python manage.py clear_cache
 	django_unset_production
 }
 
-__django_start_constructor () {
+__django_start_constructor() {
 	django_set_production
 	django_collectstatic
 	django_unset_production
@@ -168,10 +167,10 @@ __django_start_constructor () {
 	echo
 }
 
-__django_start_destructor () {
+__django_start_destructor() {
 }
 
-django_start () {
+django_start() {
 	__django_start_constructor
 
 	django_set_production
@@ -181,7 +180,7 @@ django_start () {
 	__django_start_destructor
 }
 
-django_start_gunicorn () {
+django_start_gunicorn() {
 	__django_start_constructor
 
 	django_set_production
@@ -191,13 +190,13 @@ django_start_gunicorn () {
 	__django_start_destructor
 }
 
-django_start_debug () {
+django_start_debug() {
 	DJANGO_DEBUG=1 DJANGO_ALLOWED_HOSTS='*' python manage.py runserver $*
 }
 
 # Docker
 
-docker_clear () {
+docker_clear() {
 	containers="$(docker ps -qa)"
 	if [ ! -z "$containers" ]; then
 		echo $containers | xargs docker rm
@@ -209,7 +208,7 @@ docker_clear () {
 	fi
 }
 
-docker_run () {
+docker_run() {
 	docker run --rm -it $*
 }
 
@@ -219,29 +218,29 @@ alias dcf="docker-compose -f"
 alias dcupb="docker-compose up --build"
 alias dcupbd="docker-compose up --build -d"
 
-dcupbdn () {
+dcupbdn() {
 	docker-compose up --build
 	docker-compose down
 }
 
-dcef () {
+dcef() {
 	docker-compose -f "$1" exec ${*:2}
 }
 
-dcupbf () {
+dcupbf() {
 	docker-compose -f "$1" up --build ${*:2}
 }
 
-dcupbdnf () {
+dcupbdnf() {
 	docker-compose -f "$1" up --build ${*:2}
 	docker-compose -f "$1" down
 }
 
-dcupbdf () {
+dcupbdf() {
 	docker-compose -f "$1" up --build -d ${*:2}
 }
 
-dcdnf () {
+dcdnf() {
 	docker-compose -f "$1" down ${*:2}
 }
 
@@ -249,11 +248,11 @@ dcdnf () {
 
 alias gss="git status -s -u"
 
-gclgh () {
+gclgh() {
     git clone --recurse-submodules https://github.com/$*
 }
 
-gclgl () {
+gclgl() {
     git clone --recurse-submodules https://gitlab.com/$*
 }
 
@@ -264,7 +263,7 @@ alias gobss="go build -ldflags '-s -w -linkmode external -extldflags -static'"
 
 # Mega
 
-mega_progress () {
+mega_progress() {
     while true; do
         clear && mega-transfers --limit=16
         sleep 2
@@ -273,11 +272,11 @@ mega_progress () {
 
 # Nmcli
 
-nmcli_refresh () {
+nmcli_refresh() {
 	nmcli dev wifi list --rescan yes
 }
 
-nmcli_reload () {
+nmcli_reload() {
 	nmcli net off
 	nmcli net on
 
@@ -296,8 +295,7 @@ alias zshrc="vim ~/.zshrc"
 
 # Virtual Environment Wrapper
 
-source_virtualenvironmentwrapper()
-{
+source_virtualenvironmentwrapper() {
     if [[ -a "$HOME/.local/bin/virtualenvwrapper.sh" ]]; then
         export WORKON_HOME="$HOME/.virtualenvs"
         export PROJECT_HOME="$HOME/Virtual Environment"
@@ -314,17 +312,17 @@ source_virtualenvironmentwrapper()
 
 # Cmd
 
-cmd_get_file () {
+cmd_get_file() {
 	mkdir -p ~/.cmd
 
 	echo ~/.cmd/$(echo "${1// /-}")
 }
 
-cmd_set () {
+cmd_set() {
 	vim $(cmd_get_file "$1") -c ":set syntax=bash" ${*:2}
 }
 
-cmd_get () {
+cmd_get() {
 	if [ -z "$1" ] ; then
 		ls $(cmd_get_file "$1") -1 --color=no 2>/dev/null | column
 		return 0
@@ -337,7 +335,7 @@ cmd_get () {
 	fi
 }
 
-cmd_del () {
+cmd_del() {
 	file=$(cmd_get_file "$1")
 
 	if [ -f "$file" ] ; then
@@ -349,7 +347,7 @@ cmd_del () {
 	fi
 }
 
-cmd () {
+cmd() {
 	if [ -z "$1" ] ; then
 		cmd_get
 		return 0
@@ -368,7 +366,7 @@ cmd () {
 
 # Notes
 
-notes () {
+notes() {
 	if [ "$*" = "ls" ] ; then
 		ls ~/.notes* -1 --color=no 2>/dev/null
 		return 0
