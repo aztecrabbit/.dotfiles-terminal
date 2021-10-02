@@ -1,12 +1,10 @@
-#!/bin/sh
-
 get_distribution() {
-    if [ ! -f /etc/os-release ]; then
-        echo "android"
-        return 0
-    fi
+  if [ ! -f /etc/os-release ]; then
+    echo "android"
+    return 0
+  fi
 
-    grep -E "^ID=" /etc/os-release | cut -d "=" -f 2
+  grep -E "^ID=" /etc/os-release | cut -d "=" -f 2
 }
 
 
@@ -14,12 +12,12 @@ get_distribution() {
 #
 
 if [ "$UID" != "0" ] && [ ! -f "$HOME/.antigen.zsh" ]; then
-    curl -L git.io/antigen-nightly > $HOME/.antigen.zsh
+  curl -L git.io/antigen-nightly > $HOME/.antigen.zsh
 fi
 
 if [ ! -f "$HOME/.antigen.zsh" ]; then
-    echo "Antigen not found!"
-    return 1
+  echo "Antigen not found!"
+  return 1
 fi
 
 source $HOME/.antigen.zsh
@@ -69,9 +67,9 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 # Themes
 
 if [ "$(get_distribution)" = "android" ]; then
-    antigen theme aztecrabbit/zsh-themes themes/aztecrabbit-simple
+  antigen theme aztecrabbit/zsh-themes themes/aztecrabbit-simple
 else
-    antigen theme aztecrabbit/zsh-themes themes/aztecrabbit
+  antigen theme aztecrabbit/zsh-themes themes/aztecrabbit
 fi
 
 antigen apply
@@ -102,7 +100,7 @@ alias ll="ls -l --human-readable"
 # Alias Finder
 
 a() {
-    alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
+  alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
 }
 
 # Dotfiles
@@ -114,102 +112,102 @@ alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 # Django
 
 django_delete_migrations() {
-	echo "Delete migrations? Enter to continue"
-	read
+  echo "Delete migrations? Enter to continue"
+  read
 
-	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-	find . -path "*/migrations/__pycache__/*" -delete
+  find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+  find . -path "*/migrations/__pycache__/*" -delete
 }
 
 django_set_production() {
-	export DJANGO_DEBUG=0
-	export DJANGO_ALLOWED_HOSTS='*'
+  export DJANGO_DEBUG=0
+  export DJANGO_ALLOWED_HOSTS='*'
 }
 
 django_unset_production() {
-	unset DJANGO_DEBUG
-	unset DJANGO_ALLOWED_HOSTS
+  unset DJANGO_DEBUG
+  unset DJANGO_ALLOWED_HOSTS
 }
 
 django_check() {
-	django_set_production
-	python manage.py check $*
-	django_unset_production
+  django_set_production
+  python manage.py check $*
+  django_unset_production
 }
 
 django_collectstatic() {
-	echo "Collecting staticfiles ..."
-	python manage.py collectstatic --noinput
+  echo "Collecting staticfiles ..."
+  python manage.py collectstatic --noinput
 }
 
 django_compress() {
-	django_set_production
-	python manage.py compress
-	django_unset_production
+  django_set_production
+  python manage.py compress
+  django_unset_production
 }
 
 django_clear_cache() {
-	django_set_production
-	python manage.py clear_cache
-	django_unset_production
+  django_set_production
+  python manage.py clear_cache
+  django_unset_production
 }
 
 __django_start_constructor() {
-	django_set_production
-	django_collectstatic
-	django_unset_production
-	echo
+  django_set_production
+  django_collectstatic
+  django_unset_production
+  echo
 
-	django_compress
-	echo
+  django_compress
+  echo
 
-	django_clear_cache
-	echo
+  django_clear_cache
+  echo
 }
 
 __django_start_destructor() {
 }
 
 django_start() {
-	__django_start_constructor
+  __django_start_constructor
 
-	django_set_production
-	python manage.py runserver $*
-	django_unset_production
+  django_set_production
+  python manage.py runserver $*
+  django_unset_production
 
-	__django_start_destructor
+  __django_start_destructor
 }
 
 django_start_gunicorn() {
-	__django_start_constructor
+  __django_start_constructor
 
-	django_set_production
-	gunicorn web.wsgi:application --bind $*
-	django_unset_production
+  django_set_production
+  gunicorn web.wsgi:application --bind $*
+  django_unset_production
 
-	__django_start_destructor
+  __django_start_destructor
 }
 
 django_start_debug() {
-	DJANGO_DEBUG=1 DJANGO_ALLOWED_HOSTS='*' python manage.py runserver $*
+  DJANGO_DEBUG=1 DJANGO_ALLOWED_HOSTS='*' python manage.py runserver $*
 }
 
 # Docker
 
 docker_clear() {
-	containers="$(docker ps -qa)"
-	if [ ! -z "$containers" ]; then
-		echo $containers | xargs docker rm
-	fi
+  containers="$(docker ps -qa)"
+  if [ ! -z "$containers" ]; then
+    echo $containers | xargs docker rm
+  fi
 
-	images="$(docker images | grep '^<none>' | awk '{ print $3 }')"
-	if [ ! -z "$images" ]; then
-		echo $images | xargs docker rmi
-	fi
+  images="$(docker images | grep '<none>' | awk '{ print $3 }')"
+  if [ ! -z "$images" ]; then
+    echo $images | xargs docker rmi
+  fi
 }
 
 docker_run() {
-	docker run --rm -it $*
+  docker run --rm -it $*
 }
 
 # Docker Compose
@@ -219,29 +217,29 @@ alias dcupb="docker-compose up --build"
 alias dcupbd="docker-compose up --build -d"
 
 dcupbdn() {
-	docker-compose up --build
-	docker-compose down
+  docker-compose up --build
+  docker-compose down
 }
 
 dcef() {
-	docker-compose -f "$1" exec ${*:2}
+  docker-compose -f "$1" exec ${*:2}
 }
 
 dcupbf() {
-	docker-compose -f "$1" up --build ${*:2}
+  docker-compose -f "$1" up --build ${*:2}
 }
 
 dcupbdnf() {
-	docker-compose -f "$1" up --build ${*:2}
-	docker-compose -f "$1" down
+  docker-compose -f "$1" up --build ${*:2}
+  docker-compose -f "$1" down
 }
 
 dcupbdf() {
-	docker-compose -f "$1" up --build -d ${*:2}
+  docker-compose -f "$1" up --build -d ${*:2}
 }
 
 dcdnf() {
-	docker-compose -f "$1" down ${*:2}
+  docker-compose -f "$1" down ${*:2}
 }
 
 # Git
@@ -249,11 +247,11 @@ dcdnf() {
 alias gss="git status -s -u"
 
 gclgh() {
-    git clone --recurse-submodules https://github.com/$*
+  git clone --recurse-submodules https://github.com/$*
 }
 
 gclgl() {
-    git clone --recurse-submodules https://gitlab.com/$*
+  git clone --recurse-submodules https://gitlab.com/$*
 }
 
 # Go-Lang
@@ -261,49 +259,71 @@ gclgl() {
 alias gobs="go build -ldflags '-s -w'"
 alias gobss="go build -ldflags '-s -w -linkmode external -extldflags -static'"
 
+# Kotlin
+
+ktc() {
+  kotlinc -verbose -include-runtime -d "$1.jar" "$1" || return $?
+
+  echo
+  echo "================"
+  echo "RUNNING JAR FILE"
+  echo "================"
+  echo
+
+  ktr $*
+}
+
+ktr() {
+  java -jar "$1.jar" ${@:2}
+}
+
 # Mega
 
 mega_progress() {
-    while true; do
-        clear && mega-transfers --limit=16
-        sleep 2
-    done
+  while true; do
+    clear && mega-transfers --limit=16
+    sleep 2
+  done
 }
 
 # Nmcli
 
 nmcli_refresh() {
-	nmcli dev wifi list --rescan yes
+  nmcli dev wifi list --rescan yes
 }
 
 nmcli_reload() {
-	nmcli net off
-	nmcli net on
+  nmcli net off
+  nmcli net on
 
-	sleep 1
+  sleep 1
 
-	nmcli_refresh
+  nmcli_refresh
 }
 
 # Openssh
 
+alias ssh="TERM=xterm ssh"
 alias ssh-ignore="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # Vim
 
+alias sudovim="sudo --preserve-env vim"
+alias tmuxconf="vim ~/.tmux.conf"
+alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
 
 # Virtual Environment Wrapper
 
 source_virtualenvironmentwrapper() {
-    if [[ -a "$HOME/.local/bin/virtualenvwrapper.sh" ]]; then
-        export WORKON_HOME="$HOME/.virtualenvs"
-        export PROJECT_HOME="$HOME/Virtual Environment"
-        export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python3"
-        export VIRTUALENVWRAPPER_VIRTUALENV_ARGS=" -p /usr/bin/python3"
+  if [[ -a "$HOME/.local/bin/virtualenvwrapper.sh" ]]; then
+    export WORKON_HOME="$HOME/.virtualenvs"
+    export PROJECT_HOME="$HOME/Virtual Environment"
+    export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python3"
+    export VIRTUALENVWRAPPER_VIRTUALENV_ARGS=" -p /usr/bin/python3"
 
-        source $HOME/.local/bin/virtualenvwrapper.sh
-    fi
+    source $HOME/.local/bin/virtualenvwrapper.sh
+  fi
 }
 
 
@@ -313,71 +333,78 @@ source_virtualenvironmentwrapper() {
 # Cmd
 
 cmd_get_file() {
-	mkdir -p ~/.cmd
+  mkdir -p ~/.cmd
 
-	echo ~/.cmd/$(echo "${1// /-}")
+  echo ~/.cmd/$(echo "${1// /-}")
 }
 
 cmd_set() {
-	vim $(cmd_get_file "$1") -c ":set syntax=bash" ${*:2}
+  vim $(cmd_get_file "$1") -c ":set syntax=bash" ${*:2}
 }
 
 cmd_get() {
-	if [ -z "$1" ] ; then
-		ls $(cmd_get_file "$1") -1 --color=no 2>/dev/null | column
-		return 0
-	fi
+  if [ -z "$1" ] ; then
+    ls $(cmd_get_file "$1") -1 --color=no 2>/dev/null | column
+    return 0
+  fi
 
-	file=$(cmd_get_file "$1")
+  file=$(cmd_get_file "$1")
 
-	if [ -f "$file" ] ; then
-		cat $file
-	fi
+  if [ -f "$file" ] ; then
+    cat $file
+  fi
 }
 
 cmd_del() {
-	file=$(cmd_get_file "$1")
+  file=$(cmd_get_file "$1")
 
-	if [ -f "$file" ] ; then
-		echo "Deleting $file"
-		echo "Enter to continue ..."
-		read
+  if [ -f "$file" ] ; then
+    echo "Deleting $file"
+    echo "Enter to continue ..."
+    read
 
-		rm -f $file
-	fi
+    rm -f $file
+  fi
 }
 
 cmd() {
-	if [ -z "$1" ] ; then
-		cmd_get
-		return 0
-	fi
+  if [ -z "$1" ] ; then
+    cmd_get
+    return 0
+  fi
 
-	file=$(cmd_get_file "$1")
+  file=$(cmd_get_file "$1")
 
-	if [ -f "$file" ] ; then
-		chmod +x $file
-		bash -c "$file $(echo ${@:2})"
+  if [ -f "$file" ] ; then
+    chmod +x $file
+    bash -c "$file $(echo ${@:2})"
 
-	else
-		echo "Command \"$1\" not found!"
-	fi
+  else
+    echo "Command \"$1\" not found!"
+  fi
 }
 
 # Notes
 
 notes() {
-	if [ "$*" = "ls" ] ; then
-		ls ~/.notes* -1 --color=no 2>/dev/null
-		return 0
-	fi
+  if [ "$*" = "ls" ] ; then
+    ls ~/.notes* -1 --color=no 2>/dev/null
+    return 0
+  fi
 
-	if [ "$*" ] ; then
-		vim ~/.notes-$(echo "${*// /-}" | tr "[:upper:]" "[:lower:]")
-	else
-		vim ~/.notes
-	fi
+  if [ "$*" ] ; then
+    vim ~/.notes-$(echo "${*// /-}" | tr "[:upper:]" "[:lower:]")
+  else
+    vim ~/.notes
+  fi
 }
+
+
+# Path
+#
+
+PATH="$PATH:$HOME/.local/bin"
+PATH="$PATH:$HOME/go/bin"
 
 
 # Private
