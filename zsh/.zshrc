@@ -7,12 +7,15 @@ get_distribution() {
   grep -E "^ID=" /etc/os-release | cut -d "=" -f 2
 }
 
-
 # Install Antigen
 #
 
-if [ "$UID" != "0" ] && [ ! -f "$HOME/.antigen.zsh" ]; then
+install_antigen() {
   curl -L git.io/antigen-nightly > $HOME/.antigen.zsh
+}
+
+if [ "$UID" != "0" ] && [ ! -f "$HOME/.antigen.zsh" ]; then
+  install_antigen
 fi
 
 if [ ! -f "$HOME/.antigen.zsh" ]; then
@@ -66,10 +69,16 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Themes
 
+hostname="$(hostname)"
+
 if [ "$(get_distribution)" = "android" ]; then
   antigen theme aztecrabbit/zsh-themes themes/aztecrabbit-simple
 else
-  antigen theme aztecrabbit/zsh-themes themes/aztecrabbit
+  if [ "$hostname" = "home" ] || [ "$hostname" = "laptop" ]; then
+    antigen theme aztecrabbit/zsh-themes themes/aztecrabbit
+  else
+    antigen theme aztecrabbit/zsh-themes themes/server
+  fi
 fi
 
 antigen apply
@@ -206,15 +215,13 @@ docker_clear() {
   fi
 }
 
-docker_run() {
-  docker run --rm -it $*
-}
-
 # Docker Compose
 
-alias dcf="docker-compose -f"
-alias dcupb="docker-compose up --build"
-alias dcupbd="docker-compose up --build -d"
+dcupgrade() {
+  docker-compose pull
+  docker-compose down
+  docker-compose up -d
+}
 
 dcupbdn() {
   docker-compose up --build
