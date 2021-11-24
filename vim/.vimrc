@@ -18,6 +18,8 @@ Plug 'airblade/vim-gitgutter'                           " git diff
 Plug 'vim-airline/vim-airline'                          " status bar
 Plug 'tpope/vim-commentary'                             " comment
 Plug 'sheerun/vim-polyglot'                             " syntax highlight
+Plug 'preservim/nerdtree'                               " nerd tree
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'baskerville/vim-sxhkdrc'
 
@@ -52,3 +54,9 @@ set nowrap
 
 syntax on
 colorscheme onedark
+
+
+" Shortcut
+"
+
+nnoremap <C-t> :NERDTreeToggle<CR>
