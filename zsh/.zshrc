@@ -288,10 +288,14 @@ ktr() {
 
 mega_progress() {
   while true; do
-    clear && mega-transfers --limit=16
+    clear && mega-transfers --limit=32
     sleep 2
   done
 }
+
+# Mosh
+
+alias mosh="mosh --ssh='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'"
 
 # Nmcli
 
