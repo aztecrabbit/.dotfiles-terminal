@@ -19,9 +19,6 @@ Plug 'vim-airline/vim-airline'                          " status bar
 Plug 'tpope/vim-commentary'                             " comment
 Plug 'sheerun/vim-polyglot'                             " syntax highlight
 Plug 'preservim/nerdtree'                               " nerd tree
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-Plug 'baskerville/vim-sxhkdrc'
 
 Plug 'flazz/vim-colorschemes'
 Plug 'joshdick/onedark.vim'
