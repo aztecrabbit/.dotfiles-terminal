@@ -118,89 +118,6 @@ alias dotfiles="cd ~/.dotfiles && git status -s -u"
 alias dotfiles-private="cd ~/.dotfiles-private && git status -s -u"
 alias dotfiles-terminal="cd ~/.dotfiles-terminal && git status -s -u"
 
-# Django
-
-django_delete_migrations() {
-  echo "Delete migrations? Enter to continue"
-  read
-
-  find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-  find . -path "*/migrations/__pycache__/*" -delete
-}
-
-django_set_production() {
-  export DJANGO_DEBUG=0
-  export DJANGO_ALLOWED_HOSTS='*'
-}
-
-django_unset_production() {
-  unset DJANGO_DEBUG
-  unset DJANGO_ALLOWED_HOSTS
-}
-
-django_check() {
-  django_set_production
-  python manage.py check $*
-  django_unset_production
-}
-
-django_collectstatic() {
-  echo "Collecting staticfiles ..."
-  python manage.py collectstatic --noinput
-}
-
-django_compress() {
-  django_set_production
-  python manage.py compress
-  django_unset_production
-}
-
-django_clear_cache() {
-  django_set_production
-  python manage.py clear_cache
-  django_unset_production
-}
-
-__django_start_constructor() {
-  django_set_production
-  django_collectstatic
-  django_unset_production
-  echo
-
-  django_compress
-  echo
-
-  django_clear_cache
-  echo
-}
-
-__django_start_destructor() {
-}
-
-django_start() {
-  __django_start_constructor
-
-  django_set_production
-  python manage.py runserver $*
-  django_unset_production
-
-  __django_start_destructor
-}
-
-django_start_gunicorn() {
-  __django_start_constructor
-
-  django_set_production
-  gunicorn web.wsgi:application --bind $*
-  django_unset_production
-
-  __django_start_destructor
-}
-
-django_start_debug() {
-  DJANGO_DEBUG=1 DJANGO_ALLOWED_HOSTS='*' python manage.py runserver $*
-}
-
 # Docker
 
 docker_clear() {
@@ -253,37 +170,6 @@ dcdnf() {
 
 alias gss="git status -s -u"
 
-gclgh() {
-  git clone --recurse-submodules https://github.com/$*
-}
-
-gclgl() {
-  git clone --recurse-submodules https://gitlab.com/$*
-}
-
-# Go-Lang
-
-alias gobs="go build -ldflags '-s -w'"
-alias gobss="go build -ldflags '-s -w -linkmode external -extldflags -static'"
-
-# Kotlin
-
-ktc() {
-  kotlinc -verbose -include-runtime -d "$1.jar" "$1" || return $?
-
-  echo
-  echo "================"
-  echo "RUNNING JAR FILE"
-  echo "================"
-  echo
-
-  ktr $*
-}
-
-ktr() {
-  java -jar "$1.jar" ${@:2}
-}
-
 # Mega
 
 mega_progress() {
@@ -314,8 +200,7 @@ nmcli_reload() {
 
 # Openssh
 
-alias ssh="TERM=xterm ssh"
-alias ssh-ignore="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+alias ssh="TERM=xterm-256color ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # Vim
 
