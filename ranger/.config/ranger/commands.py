@@ -59,3 +59,29 @@ class my_edit(Command):
         # This is a generic tab-completion function that iterates through the
         # content of the current directory.
         return self._tab_directory_content()
+
+class safe_delete_media(Command):
+    # The execute method is called when you run this command in ranger.
+    def execute(self):
+        # self.arg(1) is the first (space-separated) argument to the function.
+        # This way you can write ":my_edit somefilename<ENTER>".
+        if self.arg(1):
+            # self.rest(1) contains self.arg(1) and everything that follows
+            target_filename = self.rest(1)
+        else:
+            # self.fm is a ranger.core.filemanager.FileManager object and gives
+            # you access to internals of ranger.
+            # self.fm.thisfile is a ranger.container.file.File object and is a
+            # reference to the currently selected file.
+            target_filename = self.fm.thisfile.path
+
+        # Using bad=True in fm.notify allows you to print error messages:
+        if not os.path.exists(target_filename):
+            self.fm.notify("The given file does not exist!", bad=True)
+            return
+
+        if not target_filename.endswith((".png", ".jpg", ".jpeg", ".mp4", ".m4v")):
+            self.fm.notify("The given file is not media!", bad=True)
+            return
+
+        self.fm.run(["/bin/sh", "-c", f"cat /dev/null > '{target_filename}'"], flags='f')

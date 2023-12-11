@@ -153,10 +153,11 @@ handle_image() {
             ## as above), but might fail for unsupported types.
             exit 7;;
 
-        ## Video
+        # Video
         video/*)
             # Thumbnail
-            ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
+            # ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
+            vcsi "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" --fast --template /dev/null -g 3x3 -t --timestamp-font-size 21 && exit 6
             exit 1;;
 
         ## PDF
