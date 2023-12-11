@@ -112,6 +112,12 @@ a() {
   alias | grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox} "$*"
 }
 
+# Antigen
+
+antigen_update() {
+  source ~/.antigen.zsh && eval antigen update
+}
+
 # Dotfiles
 
 alias dotfiles="cd ~/.dotfiles && git status -s -u"
@@ -202,23 +208,27 @@ nmcli_reload() {
 
 alias ssh="TERM=xterm-256color ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
+# Stable Diffusion
+
+alias stable-diffusion="cd ~/Stable\ Diffusion && ./webui.sh; cd ~"
+
 # Vim
 
 alias sudovim="sudo --preserve-env vim"
-alias tmuxconf="vim ~/.tmux.conf"
+alias tconf="vim ~/.tmux.conf"
 alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
 
 # Virtual Environment Wrapper
 
 source_virtualenvironmentwrapper() {
-  if [[ -a "$HOME/.local/bin/virtualenvwrapper.sh" ]]; then
+  if [[ -a "/usr/bin/virtualenvwrapper.sh" ]]; then
     export WORKON_HOME="$HOME/.virtualenvs"
     export PROJECT_HOME="$HOME/Virtual Environment"
     export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python3"
     export VIRTUALENVWRAPPER_VIRTUALENV_ARGS=" -p /usr/bin/python3"
 
-    source $HOME/.local/bin/virtualenvwrapper.sh
+    source /usr/bin/virtualenvwrapper.sh
   fi
 }
 
@@ -300,8 +310,10 @@ notes() {
 #
 
 PATH="$PATH:$HOME/.local/bin"
+PATH="$PATH:$HOME/.cargo/bin"
 PATH="$PATH:$HOME/go/bin"
 
+EDITOR=vim
 
 # Private
 #
