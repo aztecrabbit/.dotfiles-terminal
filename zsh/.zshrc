@@ -25,6 +25,7 @@ fi
 
 source $HOME/.antigen.zsh
 
+zstyle ':omz:alpha:lib:git' async-prompt no
 
 # Antigen
 #
@@ -34,8 +35,6 @@ antigen use oh-my-zsh
 # Aliases
 
 antigen bundle adb
-antigen bundle docker
-antigen bundle docker-compose
 antigen bundle git
 antigen bundle golang
 antigen bundle history
@@ -103,7 +102,7 @@ ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=red"
 # Aliases
 #
 
-alias ls="ls --color=auto --group-directories-first --literal --time-style '+%b %d %Y %H:%m'"
+alias ls="LC_ALL='C' ls --color=auto --group-directories-first --literal --time-style '+%b %d %Y %H:%m'"
 alias ll="ls -l --human-readable"
 
 # Alias Finder
@@ -178,7 +177,14 @@ alias gss="git status -s -u"
 
 # Mega
 
+alias mega-cmd="cd ~/Downloads && /usr/bin/mega-cmd"
+
+mega_get() {
+  cd ~/Downloads && /usr/bin/mega-get -q --ignore-quota-warn $*
+}
+
 mega_progress() {
+  cd ~/Downloads
   while true; do
     clear && mega-transfers --limit=32
     sleep 2
@@ -206,7 +212,7 @@ nmcli_reload() {
 
 # Openssh
 
-alias ssh="TERM=xterm-256color ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+alias ssh="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 # Stable Diffusion
 
@@ -231,6 +237,10 @@ source_virtualenvironmentwrapper() {
     source /usr/bin/virtualenvwrapper.sh
   fi
 }
+
+# Yay
+
+alias yay="/bin/yay --pacman powerpill --answerdiff N --combinedupgrade"
 
 
 # Applications
@@ -315,6 +325,7 @@ PATH="$PATH:$HOME/go/bin"
 
 EDITOR=vim
 
+
 # Private
 #
 
@@ -323,4 +334,3 @@ EDITOR=vim
 
 #
 #
-
