@@ -20,7 +20,7 @@ Plug 'tpope/vim-commentary'                             " comment
 Plug 'sheerun/vim-polyglot'                             " syntax highlight
 Plug 'preservim/nerdtree'                               " nerd tree
 
-Plug 'flazz/vim-colorschemes'
+Plug 'EvitanRelta/vim-colorschemes'
 Plug 'joshdick/onedark.vim'
 
 call plug#end()
