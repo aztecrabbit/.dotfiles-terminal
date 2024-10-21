@@ -84,4 +84,4 @@ class safe_delete_media(Command):
             self.fm.notify("The given file is not media!", bad=True)
             return
 
-        self.fm.run(["/bin/sh", "-c", f"cat /dev/null > '{target_filename}'"], flags='f')
+        self.fm.run(["/bin/sh", "-c", f"cat /dev/null > \"{target_filename}\""], flags='f')
